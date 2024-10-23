@@ -3,9 +3,13 @@
   "version": "1.0.0",
   "description": "",
   "devDependencies": {
+    "@types/jest": "^29.5.14",
     "@types/node": "^22.7.5",
+    "aws-sdk": "^2.1691.0",
     "gts": "^6.0.1",
+    "jest": "^29.7.0",
     "serverless-offline": "^14.3.3",
+    "ts-jest": "^29.2.5",
     "typescript": "^5.6.3"
   },
   "scripts": {
@@ -16,6 +20,7 @@
     "prepare": "npm run compile",
     "pretest": "npm run compile",
     "posttest": "npm run lint",
-    "offline": "serverless offline --noSponsor --reloadHandler"
+    "offline": "serverless offline --noSponsor --reloadHandler",
+    "test": "jest"
   }
 }
