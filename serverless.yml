@@ -1,0 +1,19 @@
+# "org" ensures this Service is used with the correct Serverless Framework Access Key.
+org: litman
+# "app" enables Serverless Framework Dashboard features and sharing them with other Services.
+app: hospital-api
+# "service" is the name of this project. This will also be added to your AWS resource names.
+service: hospital-api
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+
+functions:
+  api:
+    handler: src/handler.handler
+    events:
+      - httpApi: '*'
+
+plugins:
+  - serverless-offline
