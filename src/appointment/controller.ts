@@ -3,6 +3,13 @@ import {AppointmentPayload, AppointmentResponse} from './types';
 import {getDoctorScheduleFromId} from '../utils/doctors';
 
 const scheduleAppointment = (req: Request, res: Response) => {
+  try {
+    req.body = JSON.parse(req.body.toString());
+  } catch (err) {
+    res.status(400).json({error: 'Dados JSON inválidos'});
+    return;
+  }
+
   const payload: AppointmentPayload = req.body;
   if (!payload.medico_id || !payload.paciente_nome || !payload.data_horario) {
     res.status(400).json({error: 'Faltam dados no payload'});
@@ -11,7 +18,7 @@ const scheduleAppointment = (req: Request, res: Response) => {
 
   // Schedule appointment here
 
-  const doctorSchedule = getDoctorScheduleFromId(payload.medico_id);
+  const doctorSchedule = getDoctorScheduleFromId(Number(payload.medico_id));
   if (!doctorSchedule) {
     res
       .status(404)

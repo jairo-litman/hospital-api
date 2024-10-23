@@ -28,7 +28,7 @@ describe('Appointment Controller', () => {
 
     const mockScheduleItem = mockSchedule[0];
 
-    req = {body: mockPayload};
+    req = {body: JSON.stringify(mockPayload)};
 
     const expectedResponse: AppointmentResponse = {
       mensagem: 'Agendamento realizado com sucesso',
@@ -45,6 +45,15 @@ describe('Appointment Controller', () => {
     expect(jsonMock).toHaveBeenCalledWith(expectedResponse);
   });
 
+  test('Return 400 if payload is missing', () => {
+    req = {body: undefined};
+
+    scheduleAppointment(req as Request, res as Response);
+
+    expect(statusMock).toHaveBeenCalledWith(400);
+    expect(jsonMock).toHaveBeenCalledWith({error: 'Dados JSON inválidos'});
+  });
+
   test('Return 400 if payload is missing data', () => {
     const mockPayload: AppointmentPayload = {
       medico_id: 1,
@@ -52,7 +61,7 @@ describe('Appointment Controller', () => {
       data_horario: '',
     };
 
-    req = {body: mockPayload};
+    req = {body: JSON.stringify(mockPayload)};
 
     scheduleAppointment(req as Request, res as Response);
 
@@ -67,7 +76,7 @@ describe('Appointment Controller', () => {
       data_horario: '2024-10-05 09:00',
     };
 
-    req = {body: mockPayload};
+    req = {body: JSON.stringify(mockPayload)};
 
     scheduleAppointment(req as Request, res as Response);
 
