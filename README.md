@@ -1,76 +1,96 @@
-<!--
-title: 'Serverless Framework Node Express API on AWS'
-description: 'This template demonstrates how to develop and deploy a simple Node Express API running on AWS Lambda using the Serverless Framework.'
-layout: Doc
-framework: v4
-platform: AWS
-language: nodeJS
-priority: 1
-authorLink: 'https://github.com/serverless'
-authorName: 'Serverless, Inc.'
-authorAvatar: 'https://avatars1.githubusercontent.com/u/13742415?s=200&v=4'
--->
+# Appointment managing API
 
-# Serverless Framework Node Express API on AWS
+## Description
 
-This template demonstrates how to develop and deploy a simple Node Express API service running on AWS Lambda using the Serverless Framework.
+This is a very basic API to manage appointments. It allows the user to create new appointments, list the schedules of all doctors and list the schedules of a specific doctor.
 
-This template configures a single function, `api`, which is responsible for handling all incoming requests using the `httpApi` event. To learn more about `httpApi` event configuration options, please refer to [httpApi event docs](https://www.serverless.com/framework/docs/providers/aws/events/http-api/). As the event is configured in a way to accept all incoming requests, the Express.js framework is responsible for routing and handling requests internally. This implementation uses the `serverless-http` package to transform the incoming event request payloads to payloads compatible with Express.js. To learn more about `serverless-http`, please refer to the [serverless-http README](https://github.com/dougmoscrop/serverless-http).
+The purpose of the API was to practice the concepts of RESTful APIs and to learn how to use the Serverless Framework to deploy an API to AWS Lambda. Because of this the API is very simple and only performs read operations on mocked data, no appointments are actually created or stored for example.
 
-## Usage
+## Requirements and Technologies
 
-### Deployment
+- Node.js
+- Serverless Framework
+- Serverless-Offline plugin
+- AWS Lambda
+- Express.js
+- Jest
+- Google TypeScript Style
 
-Install dependencies with:
+## How to run
 
+To run the API locally you need to have Node.js and the Serverless Framework installed.
+
+To install the Serverless Framework run:
+
+```bash
+npm install -g serverless
 ```
+
+Then clone the repository and run:
+
+```bash
 npm install
 ```
 
-and then deploy with:
+This will install the dependencies of the project.
 
-```
-serverless deploy
-```
+The Serverless-Offline plugin is used to run the API locally. To start the API run:
 
-After running deploy, you should see output similar to:
-
-```
-Deploying "aws-node-express-api" to stage "dev" (us-east-1)
-
-✔ Service deployed to stack aws-node-express-api-dev (96s)
-
-endpoint: ANY - https://xxxxxxxxxx.execute-api.us-east-1.amazonaws.com
-functions:
-  api: aws-node-express-api-dev-api (2.3 kB)
+```bash
+npm run offline
 ```
 
-_Note_: In current form, after deployment, your API is public and can be invoked by anyone. For production deployments, you might want to configure an authorizer. For details on how to do that, refer to [`httpApi` event docs](https://www.serverless.com/framework/docs/providers/aws/events/http-api/).
+The API will be available at http://localhost:3000.
 
-### Invocation
+## Endpoints
 
-After successful deployment, you can call the created application via HTTP:
+The API has three endpoints:
 
-```
-curl https://xxxxxxx.execute-api.us-east-1.amazonaws.com/
-```
+- `GET /agendas`: Lists all the schedules of all doctors.
+- `GET /agenda/{doctorId}`: Lists the schedule of a specific doctor.
+- `POST /agendamento`: Creates a new appointment.
 
-Which should result in the following response:
+The `GET /agenda/{doctorId}` endpoint expects a path parameter with the id of the doctor. For example, to list the schedule of the doctor with id 1 you would make a request to `GET /agenda/1`.
+
+If successful, both `GET` endpoints return a JSON object with the following format:
 
 ```json
-{ "message": "Hello from root!" }
+{
+  "medicos": [
+    {
+      "id": 1,
+      "nome": "Dr. João Silva",
+      "especialidade": "Cardiologista",
+      "horarios_disponiveis": [
+        "2024-10-05 09:00",
+        "2024-10-05 10:00",
+        "2024-10-05 11:00"
+      ]
+    }
+    // More doctors...
+  ]
+}
 ```
 
-### Local development
+The `POST /agendamento` endpoint expects a JSON body with the following format:
 
-The easiest way to develop and test your function is to use the `dev` command:
-
+```json
+{
+  "medico_id": 1,
+  "paciente_nome": "Carlos Almeida",
+  "data_horario": "2024-10-05 09:00"
+}
 ```
-serverless dev
+
+If successful, the endpoint will return a JSON object with the following format:
+
+```json
+{
+  "mensagem": "Agendamento realizado com sucesso",
+  "agendamento": {
+    "medico": "Dr. João Silva",
+    "paciente": "Carlos Almeida",
+    "data_horario": "2024-10-05 09:00"
+  }
+}
 ```
-
-This will start a local emulator of AWS Lambda and tunnel your requests to and from AWS Lambda, allowing you to interact with your function as if it were running in the cloud.
-
-Now you can invoke the function as before, but this time the function will be executed locally. Now you can develop your function locally, invoke it, and see the results immediately without having to re-deploy.
-
-When you are done developing, don't forget to run `serverless deploy` to deploy the function to the cloud.

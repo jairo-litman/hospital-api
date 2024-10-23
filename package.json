@@ -1,7 +1,12 @@
 {
   "name": "hospital-api",
   "version": "1.0.0",
-  "description": "",
+  "description": "A simple API to manage appointments in a clinic or hospital using mocked data",
+  "author": {
+    "name": "Jairo Litman",
+    "email": "jairo.litman@protonmail.com"
+  },
+  "license": "AGPL-3.0-only",
   "dependencies": {
     "express": "^4.21.1",
     "serverless-http": "^3.2.0"
@@ -24,7 +29,7 @@
     "prepare": "npm run compile",
     "pretest": "npm run compile",
     "posttest": "npm run lint",
-    "offline": "serverless offline --noSponsor --reloadHandler",
+    "offline": "serverless offline --noSponsor",
     "test": "jest"
   }
 }

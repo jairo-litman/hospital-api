@@ -16,8 +16,6 @@ const scheduleAppointment = (req: Request, res: Response) => {
     return;
   }
 
-  // Schedule appointment here
-
   const doctorSchedule = getDoctorScheduleFromId(Number(payload.medico_id));
   if (!doctorSchedule) {
     res
@@ -25,6 +23,8 @@ const scheduleAppointment = (req: Request, res: Response) => {
       .json({error: 'Nenhum médico encontrado com o ID informado'});
     return;
   }
+
+  // Schedule appointment here
 
   const response: AppointmentResponse = {
     mensagem: 'Agendamento realizado com sucesso',
